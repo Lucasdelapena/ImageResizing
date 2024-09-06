@@ -1,5 +1,4 @@
 import cv2
-
 # Load an image from file
 image = cv2.imread('test.jpg')  # Replace 'test_image.jpg' with your image file path
 
