@@ -9,9 +9,9 @@
       "console": "integratedTerminal",
       "args": [
         "-rows",
-        "300",
+        "4000",
         "-cols",
-        "400",
+        "4000",
         "pictures"
       ]
     },

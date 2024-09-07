@@ -1,0 +1,1 @@
+This is a test to check if it only looks at images

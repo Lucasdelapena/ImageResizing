@@ -11,32 +11,20 @@ import os
 import argparse
 from screeninfo import get_monitors
 
-# f5 to run
-# python Assignment1_CS4420.py -rows 10 -cols 20 test.jpg
-
+# sample execution: python Assignment1_CS4420.py -rows 300 -cols 400 pictures 
 
 def main():
 
-    parser = argparse.ArgumentParser(prog='browser')
-    
+    parser = argparse.ArgumentParser(prog='browser') # -h should be automatically added because of argparse
     parser.add_argument('-rows', type=int) # add argument with equal
     parser.add_argument('-cols', type=int) 
     parser.add_argument('dir')
-    #parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help='Show this help message and exit')
     args = parser.parse_args()
     rows = args.rows
     cols = args.cols
 
-    cv2.namedWindow('Image Window', cv2.WINDOW_NORMAL)
-    cv2.resizeWindow('Image Window', rows, cols)
-    # look at warpAffine
-
-    dir = args.dir
-    picslist = []
-    filenameList = []
-
     # Get monitor information
-    for m in get_monitors():
+    for m in get_monitors(): #note: this gets takes the last monitor
         maxWidth = m.width
         maxHeight = m.height
 
@@ -46,12 +34,19 @@ def main():
     if cols > maxHeight:
         cols = maxHeight
 
+    cv2.namedWindow('Image Window', cv2.WINDOW_NORMAL)
+    cv2.resizeWindow('Image Window', rows, cols)
+
+    dir = args.dir
+    picslist = []
+    filenameList = []
+
     # gets directory path, directory names, and file names
     for dirpath, dirnames, filenames in os.walk(dir, topdown=False): 
         for filename in filenames:
             picslist.append(os.path.join(dirpath, filename))
             filenameList.append(filename)
-            
+                      
     imageNumber = 0 # counter for loop
     while True:
         pic = picslist[imageNumber]
@@ -60,7 +55,9 @@ def main():
 
         # Check if the image was successfully loaded
         if image is None:
-            raise Exception(f"Cannot open input image {pic}")
+            filenameList.pop(imageNumber) # removing non-image files from the list
+            picslist.pop(imageNumber)
+            continue
         
         # File name
         print(f"File name: {filenameList[imageNumber]}")
@@ -108,8 +105,6 @@ def main():
 
         if useraction == ord('q'):
             break
-
-
 
 if __name__ == "__main__":
     main()
