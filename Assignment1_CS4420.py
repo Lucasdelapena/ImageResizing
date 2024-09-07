@@ -1,3 +1,8 @@
+# Lucas de la Pena
+# CS4420/5420
+# Assignment 1
+# 09/9/2024
+
 import cv2
 import sys
 import numpy as np
@@ -7,6 +12,8 @@ import argparse
 
 # f5 to run
 # python Assignment1_CS4420.py -rows 10 -cols 20 test.jpg
+
+
 def main():
 
     parser = argparse.ArgumentParser(prog='browser')
@@ -17,6 +24,10 @@ def main():
     args = parser.parse_args()
     rows = args.rows
     cols = args.cols
+
+    cv2.namedWindow('Image Window', cv2.WINDOW_NORMAL)
+    cv2.resizeWindow('Image Window', rows, cols)
+    # look at warpAffine
 
     dir = args.dir
     picslist = []
@@ -40,7 +51,7 @@ def main():
         print (f"Image dimensions: {image.shape[1]} x {image.shape[0]}")
 
         # Displayimage
-        cv2.imshow('Image', image)
+        cv2.imshow('Image Window', image)
 
         # Display value at a random pixel
         rows, cols, _ = image.shape
