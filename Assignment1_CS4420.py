@@ -24,7 +24,7 @@ def main():
     cols = args.cols
 
     # Get monitor information
-    for m in get_monitors(): #note: this gets takes the last monitor
+    for m in get_monitors(): #note: this gets takes the last monitor info
         maxWidth = m.width
         maxHeight = m.height
 
@@ -90,7 +90,6 @@ def main():
         # Color pixel
         pxl_color = image[r, c]
         print(f"Color pixel at ({r},{c}) = ({int(pxl_color[0])}, {int(pxl_color[1])}, {int(pxl_color[2])})")
-
     
         # User actions
         useraction = cv2.waitKey(0) & 0xFF
