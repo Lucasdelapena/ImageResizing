@@ -16,6 +16,12 @@ from screeninfo import get_monitors
 #pip install screeninfo
 #pip install opencv-python
 #pip install pillow
+#https://www.geeksforgeeks.org/python-opencv-resizewindow-function/
+#https://docs.python.org/3/library/argparse.html
+#https://stackoverflow.com/questions/2232742/does-python-pil-resize-maintain-the-aspect-ratio
+#https://www.geeksforgeeks.org/python-pil-image-thumbnail-method/
+
+
 
 def main():
 
@@ -26,7 +32,7 @@ def main():
     args = parser.parse_args()
     rows = args.rows
     cols = args.cols
- 
+
     # Get monitor information
     for m in get_monitors(): #note: this gets takes the last monitor info
         maxWidth = m.width
@@ -34,9 +40,9 @@ def main():
     
      # Check if rows and cols are greater than the monitor size
     if rows > maxWidth:
-        rows = maxWidth
+        rows = maxWidth - 200
     if cols > maxHeight:
-        cols = maxHeight
+        cols = maxHeight - 200
 
     dir = args.dir
     picslist = []
@@ -51,6 +57,10 @@ def main():
     # This is for no window resizing
     if rows == 0 or cols == 0:
         noWinChange = True
+    else:
+        noWinChange = False
+        cv2.namedWindow("Image Window", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow('Image Window', rows, cols)
 
     imageNumber = 0 # counter for loop
     while True:
@@ -63,17 +73,27 @@ def main():
             filenameList.pop(imageNumber) # removing non-image files from the list
             picslist.pop(imageNumber)
             continue
-    
+
         # No window resizing
-        if noWinChange == True:
+        if noWinChange == True: #This works
             cv2.imshow('Image Window', image)
             cv2.resizeWindow('Image Window', image.shape[1], image.shape[0])
-        
-        #Window resizing
-        else: 
-            cv2.resizeWindow('Image Window', rows, cols)
+            #shrinks the image to fit the screen
+            if image.shape[1] > maxWidth or image.shape[0] > maxHeight:
+                width = int(image.shape[1])
+                height = int(image.shape[0])
+                #image = image.thumbnail((maxWidth - 200, maxHeight - 200), Image.ANTIALIAS)
+                ratio = int(width) / int(height)
+                image = cv2.resize(image, (500, 500 )) #add ratio here
+                cv2.resizeWindow('Image Window', 500 , 500)
+                #resize image
+               
             cv2.imshow('Image Window', image)
-        
+           
+        #Window resizing
+        else: #This works
+            cv2.imshow('Image Window', image)
+                 
         # File name
         print(f"File name: {filenameList[imageNumber]}")
 
