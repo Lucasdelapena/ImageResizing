@@ -9,9 +9,13 @@ import numpy as np
 import random
 import os
 import argparse
+from PIL import Image
 from screeninfo import get_monitors
 
 # sample execution: python Assignment1_CS4420.py -rows 300 -cols 400 pictures 
+#pip install screeninfo
+#pip install opencv-python
+#pip install pillow
 
 def main():
 
@@ -27,16 +31,12 @@ def main():
     for m in get_monitors(): #note: this gets takes the last monitor info
         maxWidth = m.width
         maxHeight = m.height
-
-    # Check if rows and cols are greater than the monitor size
+    
+     # Check if rows and cols are greater than the monitor size
     if rows > maxWidth:
         rows = maxWidth
     if cols > maxHeight:
         cols = maxHeight
-
-    cv2.namedWindow('Image Window', cv2.WINDOW_NORMAL)
-    if rows > 0 and cols > 0:
-        cv2.resizeWindow('Image Window', rows, cols)
 
     dir = args.dir
     picslist = []
@@ -47,7 +47,11 @@ def main():
         for filename in filenames:
             picslist.append(os.path.join(dirpath, filename))
             filenameList.append(filename)
-                      
+    
+    # This is for no window resizing
+    if rows == 0 or cols == 0:
+        noWinChange = True
+
     imageNumber = 0 # counter for loop
     while True:
         pic = picslist[imageNumber]
@@ -59,6 +63,16 @@ def main():
             filenameList.pop(imageNumber) # removing non-image files from the list
             picslist.pop(imageNumber)
             continue
+    
+        # No window resizing
+        if noWinChange == True:
+            cv2.imshow('Image Window', image)
+            cv2.resizeWindow('Image Window', image.shape[1], image.shape[0])
+        
+        #Window resizing
+        else: 
+            cv2.resizeWindow('Image Window', rows, cols)
+            cv2.imshow('Image Window', image)
         
         # File name
         print(f"File name: {filenameList[imageNumber]}")
@@ -79,9 +93,6 @@ def main():
         #file type
         fileType = os.path.splitext(pic)[1] 
         print(f"File type: {fileType}")
-
-        # Displayimage
-        cv2.imshow('Image Window', image)
 
         # Display value at a random pixel
         rows, cols, _ = image.shape
