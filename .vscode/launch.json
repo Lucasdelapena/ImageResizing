@@ -7,13 +7,7 @@
       "request": "launch",
       "program": "${file}",
       "console": "integratedTerminal",
-      "args": [
-        "-rows",
-        "4000",
-        "-cols",
-        "4000",
-        "pictures"
-      ]
+      "args": [ "-rows","400","-cols","400","pictures"],
     },
     {
       "name": "C/C++ Runner: Debug Session",

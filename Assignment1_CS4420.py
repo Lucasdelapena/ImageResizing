@@ -16,13 +16,13 @@ from screeninfo import get_monitors
 def main():
 
     parser = argparse.ArgumentParser(prog='browser') # -h should be automatically added because of argparse
-    parser.add_argument('-rows', type=int) # add argument with equal
-    parser.add_argument('-cols', type=int) 
+    parser.add_argument('-rows', type=int, default=0) 
+    parser.add_argument('-cols', type=int, default=0) 
     parser.add_argument('dir')
     args = parser.parse_args()
     rows = args.rows
     cols = args.cols
-
+ 
     # Get monitor information
     for m in get_monitors(): #note: this gets takes the last monitor info
         maxWidth = m.width
@@ -35,7 +35,8 @@ def main():
         cols = maxHeight
 
     cv2.namedWindow('Image Window', cv2.WINDOW_NORMAL)
-    cv2.resizeWindow('Image Window', rows, cols)
+    if rows > 0 and cols > 0:
+        cv2.resizeWindow('Image Window', rows, cols)
 
     dir = args.dir
     picslist = []
