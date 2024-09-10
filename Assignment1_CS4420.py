@@ -13,18 +13,9 @@ from PIL import Image
 from screeninfo import get_monitors
 
 # sample execution: python Assignment1_CS4420.py -rows 300 -cols 400 pictures 
-#pip install screeninfo
-#pip install opencv-python
-#pip install pillow
-#https://www.geeksforgeeks.org/python-opencv-resizewindow-function/
-#https://docs.python.org/3/library/argparse.html
-#https://stackoverflow.com/questions/2232742/does-python-pil-resize-maintain-the-aspect-ratio
-#https://www.geeksforgeeks.org/python-pil-image-thumbnail-method/
-
-
 
 def main():
-
+    # Arguments
     parser = argparse.ArgumentParser(prog='browser') # -h should be automatically added because of argparse
     parser.add_argument('-rows', type=int, default=0) 
     parser.add_argument('-cols', type=int, default=0) 
@@ -32,6 +23,8 @@ def main():
     args = parser.parse_args()
     rows = args.rows
     cols = args.cols
+    OrginRows = rows # made for dimensions
+    OrginCols = cols
 
     # Get monitor information
     for m in get_monitors(): #note: this gets takes the last monitor info
@@ -44,6 +37,7 @@ def main():
     if cols > maxHeight:
         cols = maxHeight - 200
 
+    # lists and directory
     dir = args.dir
     picslist = []
     filenameList = []
@@ -77,68 +71,56 @@ def main():
         # No window resizing
         if noWinChange == True: #This works
             cv2.imshow('Image Window', image)
-            #cv2.resizeWindow('Image Window', image.shape[1], image.shape[0])
-            #shrinks the image to fit the screen
             
+            #This is for if the image is bigger than the screen
             if image.shape[1] > maxWidth or image.shape[0] > maxHeight:
                
                 width = image.shape[1]
                 height = image.shape[0]
-                ##image = image.thumbnail((maxWidth - 200, maxHeight - 200), Image.ANTIALIAS)
                 ratio = width / height
 
                 if width > maxWidth:
                     newWidth = maxWidth - 200
-                    newheight = int(newWidth / ratio)
+                    newHeight = int(newWidth / ratio)
                 elif height > maxHeight:
-                    newheight = maxHeight - 200
-                    newWidth = int(newheight * ratio)
+                    newHeight = maxHeight - 200
+                    newWidth = int(newHeight * ratio)
                 else:
                     newWidth = width
-                    newheight = height
+                    newHeight = height
             else:
                 newWidth = image.shape[1]
-                newheight = image.shape[0]        
+                newHeight = image.shape[0]        
 
-
-            image = cv2.resize(image, (newWidth, newheight )) #add ratio here
-            cv2.resizeWindow('Image Window', newWidth , newheight)
-                #resize image
-               
+            image = cv2.resize(image, (newWidth, newHeight ))
+            cv2.resizeWindow('Image Window', newWidth , newHeight)
             cv2.imshow('Image Window', image)
            
         #Window resizing
-        else: #This works
+        else:
+            newWidth = OrginRows
+            newHeight = OrginCols
             cv2.imshow('Image Window', image)
-                 
-        # File name
-        print(f"File name: {filenameList[imageNumber]}")
-
-        # File path
-        print(f"File path: {os.path.dirname(pic)}")
-        
-        # Image dimensions
-        print (f"Image dimensions: {image.shape[1]} x {image.shape[0]}")
-
-        # Image amount of pixels
-        print (f"Amount of pixels: {image.size}")
-
-        #file size
+                
+        # Output Variables
+        fileName = filenameList[imageNumber]
+        filePath = os.path.dirname(pic)
+        imageDimensions = f"{newWidth} x {newHeight}"
+        numOfPixels = image.size
         fileSize = os.path.getsize(pic)
-        print(f"File size: {fileSize} bytes")
-
-        #file type
-        fileType = os.path.splitext(pic)[1] 
-        print(f"File type: {fileType}")
+        fileType = os.path.splitext(pic)[1]
 
         # Display value at a random pixel
         rows, cols, _ = image.shape
         r = random.randint(0, rows - 1)
         c = random.randint(0, cols - 1)
+        pixelColor = image[r, c]
+        colorPixel = f"({int(pixelColor[0])}, {int(pixelColor[1])}, {int(pixelColor[2])})"
 
-        # Color pixel
-        pxl_color = image[r, c]
-        print(f"Color pixel at ({r},{c}) = ({int(pxl_color[0])}, {int(pxl_color[1])}, {int(pxl_color[2])})")
+        #outputs
+        print(f"File name: {fileName} | File path: {filePath} | Dimensions: {imageDimensions} | "
+            f"Pixel Count: {numOfPixels} | File size: {fileSize} bytes | File type: {fileType} | "
+            f"Color pixel at ({r},{c}) = {colorPixel}")
     
         # User actions
         useraction = cv2.waitKey(0) & 0xFF
