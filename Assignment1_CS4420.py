@@ -77,15 +77,32 @@ def main():
         # No window resizing
         if noWinChange == True: #This works
             cv2.imshow('Image Window', image)
-            cv2.resizeWindow('Image Window', image.shape[1], image.shape[0])
+            #cv2.resizeWindow('Image Window', image.shape[1], image.shape[0])
             #shrinks the image to fit the screen
+            
             if image.shape[1] > maxWidth or image.shape[0] > maxHeight:
-                width = int(image.shape[1])
-                height = int(image.shape[0])
-                #image = image.thumbnail((maxWidth - 200, maxHeight - 200), Image.ANTIALIAS)
-                ratio = int(width) / int(height)
-                image = cv2.resize(image, (500, 500 )) #add ratio here
-                cv2.resizeWindow('Image Window', 500 , 500)
+               
+                width = image.shape[1]
+                height = image.shape[0]
+                ##image = image.thumbnail((maxWidth - 200, maxHeight - 200), Image.ANTIALIAS)
+                ratio = width / height
+
+                if width > maxWidth:
+                    newWidth = maxWidth - 200
+                    newheight = int(newWidth / ratio)
+                elif height > maxHeight:
+                    newheight = maxHeight - 200
+                    newWidth = int(newheight * ratio)
+                else:
+                    newWidth = width
+                    newheight = height
+            else:
+                newWidth = image.shape[1]
+                newheight = image.shape[0]        
+
+
+            image = cv2.resize(image, (newWidth, newheight )) #add ratio here
+            cv2.resizeWindow('Image Window', newWidth , newheight)
                 #resize image
                
             cv2.imshow('Image Window', image)

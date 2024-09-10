@@ -7,7 +7,13 @@
       "request": "launch",
       "program": "${file}",
       "console": "integratedTerminal",
-      "args": ["-rows","400","-cols","400","pictures"],
+      "args": [
+        "-rows",
+        "400",
+        "-cols",
+        "400",
+        "pictures"
+      ]
     },
     {
       "name": "C/C++ Runner: Debug Session",
@@ -16,8 +22,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": ".",
-      "program": "build/Debug/outDebug",
+      "cwd": "c:/Users/Lucas-2020/Documents/GitHub/Project1CS4420/venv",
+      "program": "c:/Users/Lucas-2020/Documents/GitHub/Project1CS4420/venv/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
