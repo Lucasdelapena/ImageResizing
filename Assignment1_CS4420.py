@@ -1,6 +1,4 @@
 # Lucas de la Pena
-# CS4420/5420
-# Assignment 1
 # 09/9/2024
 
 import cv2
